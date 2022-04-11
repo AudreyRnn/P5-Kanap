@@ -4,6 +4,7 @@ console.log(id);
 
 getProduct();
 
+// récupération de données de l'api pour le canapé choisi
 function getProduct() {
   fetch(`http://localhost:3000/api/products/${id}`)
     .then(function (response) {
@@ -22,6 +23,7 @@ function getProduct() {
     });
 }
 
+// creation des éléments pour affichage des propriétés des produits
 function getPost(product) {
   let productImg = document.createElement("img");
   document.querySelector(".item__img").appendChild(productImg);
