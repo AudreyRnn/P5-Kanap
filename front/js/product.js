@@ -1,13 +1,11 @@
-let params = new URLSearchParams(window.location.search);
+let params = new URLSearchParams(location.search);
 let id = params.get("id");
-
-console.log(id);
 
 getProduct();
 
 // récupération de données de l'api pour le canapé choisi
 function getProduct() {
-  fetch(`http://localhost:3000/api/products/${id}`)
+  fetch("http://localhost:3000/api/products/" + id)
     .then(function (response) {
       return response.json();
     })
@@ -26,30 +24,91 @@ function getProduct() {
 
 // creation des éléments pour affichage des propriétés des produits
 function getPost(product) {
-
   // l'image
   let productImg = document.createElement("img");
   document.querySelector(".item__img").appendChild(productImg);
   productImg.src = product.imageUrl;
   productImg.alt = product.altTxt;
 
-  // nom du produit 
+  // nom du produit
   let productName = document.getElementById("title");
   productName.innerHTML = product.name;
 
-  // le prix 
+  // le prix
   let productPrice = document.getElementById("price");
   productPrice.innerHTML = product.price;
 
-  // La description 
+  // La description
   let productDescription = document.getElementById("description");
   productDescription.innerHTML = product.description;
 
-  // les options de couleur 
+  // les options de couleur
   for (let colors of product.colors) {
     let productColors = document.createElement("option");
     document.querySelector("#colors").appendChild(productColors);
     productColors.value = colors;
     productColors.innerHTML = colors;
   }
+  addToCart(product);
+}
+
+// selection des options couleurs et des quantités
+
+const colorOption = document.querySelector("#colors");
+const quantityOption = document.querySelector("#quantity");
+
+function addToCart(product) {
+  // selectionner le bouton d'envoi au panier
+  const btnAddToCart = document.querySelector("#addTocart");
+
+  // écouter panier avec couleur choisie et quantité entre 1 et 100
+  btnAddToCart.addEventListener("click", (event) => {
+    if (
+      quantityOption.value > 0 &&
+      quantityOption.value <= 100 &&
+      colorOption.value != null
+    ) {
+      // mettre les choix du visiteur dans des variables
+      let colorChoice = colorOption.value;
+      let quantityChoice = quantityOption.value;
+
+      // récupérer les valeurs choisies
+
+      let productOptions = {
+        idProduct: id,
+        colorProduct: colorChoice,
+        quantityProduct: parseInt(quantityChoice),
+      };
+
+      //récuérer , JSON.parse pour convertir données en JS
+
+      let localStorageProduct = JSON.parse(localStorage.getItem("item"));
+
+      // si panier comprend déjà un article utiliser la fonction find? (parcourir la copie ds ls et si même id et même couleur je remplace que la quantité)
+
+      if (localStorageProduct) {
+        let indexKanapExist = localStorageProduct.findIndex(
+          (obj) =>
+            obj.idProduct == product._id && obj.colorProduct == colorChoice
+        );
+        if (indexKanapExist == -1) {
+          localStorageProduct.push(productOptions);
+          localStorage.setItem("item", JSON.stringify(localStorageProduct));
+        } else {
+          localStorageProduct[indexKanapExist].quantityProduct =
+            parseInt(localStorageProduct[indexKanapExist].quantityProduct) +
+            parseInt(quantityChoice);
+          localStorage.setItem("item", JSON.stringify(localStorageProduct));
+        }
+      }
+
+      // importer dans localstorage si panier vide
+      else {
+        localStorageProduct = [];
+        localStorageProduct.push(productOptions);
+        localStorage.setItem("item", JSON.stringify(localStorageProduct));
+        console.table(localStorageProduct);
+      }
+    }
+  });
 }
