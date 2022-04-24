@@ -57,11 +57,12 @@ function getPost(product) {
 const colorOption = document.querySelector("#colors");
 const quantityOption = document.querySelector("#quantity");
 
+// ajouter les produits
 function addToCart(product) {
   // selectionner le bouton d'envoi au panier
   const btnAddToCart = document.querySelector("#addTocart");
 
-  // écouter panier avec couleur choisie et quantité entre 1 et 100
+  // écouter panier avec quantité entre 1 et 100 et couleur non nulle
   btnAddToCart.addEventListener("click", (event) => {
     if (
       quantityOption.value > 0 &&
@@ -80,11 +81,20 @@ function addToCart(product) {
         quantityProduct: parseInt(quantityChoice),
       };
 
-      //récuérer , JSON.parse pour convertir données en JS
+      // fenêtre pop up pour envoi vers panier
+      const confirmationPopup = () => {
+        if (
+          window.confirm(`Vous avez placé  ${quantityChoice} ${product.name} ${colorChoice} dans votre panier.
+Pour consulter votre panier, cliquez sur OK`)
+        ) {
+          window.location.href = "cart.html";
+        }
+      };
+      //récupérer , JSON.parse pour convertir données en JS
 
       let localStorageProduct = JSON.parse(localStorage.getItem("item"));
 
-      // si panier comprend déjà un article utiliser la fonction find? (parcourir la copie ds ls et si même id et même couleur je remplace que la quantité)
+      // si le panier comprend déjà un article (parcourir le LS et si même id et  couleur je remplace que la quantité )
 
       if (localStorageProduct) {
         let indexKanapExist = localStorageProduct.findIndex(
@@ -94,11 +104,13 @@ function addToCart(product) {
         if (indexKanapExist == -1) {
           localStorageProduct.push(productOptions);
           localStorage.setItem("item", JSON.stringify(localStorageProduct));
+          confirmationPopup();
         } else {
           localStorageProduct[indexKanapExist].quantityProduct =
             parseInt(localStorageProduct[indexKanapExist].quantityProduct) +
             parseInt(quantityChoice);
           localStorage.setItem("item", JSON.stringify(localStorageProduct));
+          confirmationPopup();
         }
       }
 
@@ -108,6 +120,7 @@ function addToCart(product) {
         localStorageProduct.push(productOptions);
         localStorage.setItem("item", JSON.stringify(localStorageProduct));
         console.table(localStorageProduct);
+        confirmationPopup();
       }
     }
   });
