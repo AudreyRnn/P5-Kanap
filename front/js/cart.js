@@ -1,6 +1,8 @@
 // Récupération du local Storage
 let localStorageProduct = JSON.parse(localStorage.getItem("item"));
-console.log(localStorageProduct);
+var totalQuantity = 0;
+
+console.table(localStorageProduct);
 const emptyCart = document.querySelector("#cart__items");
 
 function getToCart() {
@@ -8,9 +10,10 @@ function getToCart() {
   if (localStorageProduct === null || localStorageProduct === 0) {
     const yourCartIsEmpty = `<p> Votre panier ne contient aucun article<p>`;
     emptyCart.innerHTML = yourCartIsEmpty;
+    return [];
   } else {
     //si panier non vide
-    localStorageProduct.forEach((item) => {
+    localStorageProduct.forEach((item, index) => {
       console.log(item.idProduct);
       fetch("http://localhost:3000/api/products/" + item.idProduct)
         .then(function (response) {
@@ -24,7 +27,7 @@ function getToCart() {
           let cartArticle = document.createElement("article");
           emptyCart.appendChild(cartArticle);
           cartArticle.className = "cart__item";
-          cartArticle.setAttribute("data-id", resultatApi._id);
+          cartArticle.setAttribute("data-id", product._id);
 
           //insertion de la div
           let itemDivImg = document.createElement("div");
@@ -34,8 +37,8 @@ function getToCart() {
           // insertion de l'image
           let itemImg = document.createElement("img");
           itemDivImg.appendChild(itemImg);
-          itemImg.src = resultatApi.imageUrl;
-          itemImg.alt = resultatApi.altTxt;
+          itemImg.src = product.imageUrl;
+          itemImg.alt = product.altTxt;
 
           // insertion balise div content
           let itemContent = document.createElement("div");
@@ -60,7 +63,7 @@ function getToCart() {
           //insertion du prix
           let itemPrice = document.createElement("p");
           itemContentDescription.appendChild(itemPrice);
-          itemPrice.innerHTML = resultatApi.price + " €";
+          itemPrice.innerHTML = product.price + " €";
 
           // insertion balise div content settings
           let contentSetting = document.createElement("div");
@@ -76,7 +79,7 @@ function getToCart() {
           // Insertion de la Quantité
           let itemQtity = document.createElement("p");
           contentSettingsQuantity.appendChild(itemQtity);
-          itemQtity.innerText = "Quantité : " + item.quantityProduct;
+          itemQtity.innerText = "Quantité : "; 
 
           // input quantité
           let inputQuantity = document.createElement("input");
@@ -87,20 +90,38 @@ function getToCart() {
           inputQuantity.setAttribute("min", "1");
           inputQuantity.setAttribute("max", "100");
           inputQuantity.setAttribute("name", "itemQuantity");
+          totalQuantity += item.quantityProduct;
+          console.log(item.quantityProduct);
 
-          // insertion de la div delete
+          // // insertion de la div delete
 
           let contentSettingsDelete = document.createElement("div");
           contentSetting.appendChild(contentSettingsDelete);
           contentSettingsDelete.className =
             "cart__item__content__settings__delete";
 
-          // insertion de la balise "p" delete
+          // // insertion de la balise "p" delete
 
           let itemDelete = document.createElement("p");
           contentSettingsDelete.appendChild(itemDelete);
           itemDelete.className = "deleteItem ";
           itemDelete.innerText = "Supprimer";
+          itemDelete.addEventListener("click", function () {
+            console.log(index);
+            let newCart = localStorageProduct.splice(index, 1);
+            localStorage.setItem("item", JSON.stringify(localStorageProduct));
+            location.reload();
+          });
+
+          let itemTotal = document.querySelector("#totalQuantity");
+          itemTotal.innerHTML = totalQuantity;
+          console.log(totalQuantity);
+
+          let priceTotal = document.querySelector("#totalPrice");
+          priceTotal.innerHTML = totalQuantity * resultatApi.price;
+          
+        
+          
         })
 
         .catch((error) => {
@@ -111,3 +132,18 @@ function getToCart() {
 }
 
 getToCart();
+
+
+//**************************************************************************
+
+// formulaire
+
+// nom et prénom
+// RegEx("^[a-z]+[ -']?[[a-z]+[ -']?]*[a-z]+$", "gi");
+
+// // tester un email
+// ^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$
+
+// tester un code postal
+
+// ^((0[1-9])|([1-8][0-9])|(9[0-8])|(2A)|(2B))[0-9]{3}$

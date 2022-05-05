@@ -90,7 +90,7 @@ Pour consulter votre panier, cliquez sur OK`)
           window.location.href = "cart.html";
         }
       };
-      //récupérer , JSON.parse pour convertir données en JS
+      //récupérer les données dans le LS, JSON.parse pour convertir données en JS
 
       let localStorageProduct = JSON.parse(localStorage.getItem("item"));
 
