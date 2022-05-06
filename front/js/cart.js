@@ -1,6 +1,7 @@
 // Récupération du local Storage
 let localStorageProduct = JSON.parse(localStorage.getItem("item"));
 var totalQuantity = 0;
+var priceTotal = 0;
 
 console.table(localStorageProduct);
 const emptyCart = document.querySelector("#cart__items");
@@ -64,6 +65,7 @@ function getToCart() {
           let itemPrice = document.createElement("p");
           itemContentDescription.appendChild(itemPrice);
           itemPrice.innerHTML = product.price + " €";
+          priceTotal += item.quantityProduct * product.price; 
 
           // insertion balise div content settings
           let contentSetting = document.createElement("div");
@@ -79,7 +81,7 @@ function getToCart() {
           // Insertion de la Quantité
           let itemQtity = document.createElement("p");
           contentSettingsQuantity.appendChild(itemQtity);
-          itemQtity.innerText = "Quantité : "; 
+          itemQtity.innerText = "Quantité : ";
 
           // input quantité
           let inputQuantity = document.createElement("input");
@@ -91,7 +93,7 @@ function getToCart() {
           inputQuantity.setAttribute("max", "100");
           inputQuantity.setAttribute("name", "itemQuantity");
           totalQuantity += item.quantityProduct;
-          console.log(item.quantityProduct);
+          
 
           // // insertion de la div delete
 
@@ -107,7 +109,7 @@ function getToCart() {
           itemDelete.className = "deleteItem ";
           itemDelete.innerText = "Supprimer";
           itemDelete.addEventListener("click", function () {
-            console.log(index);
+            
             let newCart = localStorageProduct.splice(index, 1);
             localStorage.setItem("item", JSON.stringify(localStorageProduct));
             location.reload();
@@ -117,11 +119,8 @@ function getToCart() {
           itemTotal.innerHTML = totalQuantity;
           console.log(totalQuantity);
 
-          let priceTotal = document.querySelector("#totalPrice");
-          priceTotal.innerHTML = totalQuantity * resultatApi.price;
-          
-        
-          
+          let cartPrice = document.querySelector("#totalPrice");
+          cartPrice.innerHTML = priceTotal;
         })
 
         .catch((error) => {
@@ -132,7 +131,6 @@ function getToCart() {
 }
 
 getToCart();
-
 
 //**************************************************************************
 
