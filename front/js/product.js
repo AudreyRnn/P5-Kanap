@@ -3,7 +3,7 @@ let id = params.get("id");
 
 getProduct();
 
-// récupération de données de l'api pour le canapé choisi
+// récupération des données de l'api pour le canapé choisi
 function getProduct() {
   fetch("http://localhost:3000/api/products/" + id)
     .then(function (response) {
@@ -94,7 +94,7 @@ Pour consulter votre panier, cliquez sur OK`)
 
       let localStorageProduct = JSON.parse(localStorage.getItem("item"));
 
-      // si le panier comprend déjà un article (parcourir le LS et si même id et  couleur je remplace que la quantité )
+      // si le panier comprend déjà un article (parcourir le LS et si même id et couleur je remplace que la quantité )
 
       if (localStorageProduct) {
         let indexKanapExist = localStorageProduct.findIndex(
