@@ -157,146 +157,86 @@ function getToCart() {
 }
 
 getToCart();
+////////////////////////////////// FORMULAIRE///////////////////////////////////////////////////////////////
 
-//********************************FORMULAIRE DE COMMANDE ******************************************
+// Liste des variabls RegEx
 
-function checkForm() {
-  // liste des reg exp à tester
+//prénom , nom et ville
+let textReg = /^[A-Za-zÀ-ž-'\s]{2,35}$/;
+//adresse
+let addressReg = /^[0-9A-Za-zÀ-ž-'\s]{3,40}$/;
+//mail
+let emailReg = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/;
 
-  // prénom entre 3 et 20 caractères, accents et tirets autorisés
-  let firstNameReg = new RegExp("^[A-Za-zÀ-ž-]{3,20}$");
+// récupération des id des inputs
 
-  // nom de famile entre 2 et 20 caractères, tiret, accent apostrophe et espace autorisé
-  let nameReg = new RegExp("^[A-Za-zÀ-ž-' ]{2,20}$");
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const address = document.getElementById("address");
+const city = document.getElementById("city");
+const email = document.getElementById("email");
 
-  // adresse chiffres autorisés +mêmes caractères que nom -- code postal à voir
-  let addressReg = new RegExp("^[0-9]+[A-Za-zÀ-ž-' ]*$");
+// vérification des données
 
-  // ville: mêmes caractéristiques que le nom
-  let cityReg = new RegExp("^[A-Za-zÀ-ž-' ]{2,20}$");
+// prénom
+firstName.addEventListener("input", (e) => {
+  e.preventDefault();
+  if (textReg.test(firstName.value) == false || firstName.value == "") {
+    document.getElementById("firstNameErrorMsg").textContent =
+      "Merci de saisir un prénom valide (pas de chiffres ni de carctères spéciaux autre que - et '";
+    return false;
+  } else {
+    document.getElementById("firstNameErrorMsg").textContent = "";
+    return true;
+  }
+});
 
-  // email
-  let emailReg = new RegExp(
-    "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$"
-  );
+// nom
+lastName.addEventListener("input", (e) => {
+  e.preventDefault();
+  if (textReg.test(lastName.value) == false || lastName.value == "") {
+    document.getElementById("lastNameErrorMsg").textContent =
+      "Merci de saisir un nom valide (pas de chiffres ni de carctères spéciaux autre que - et '";
+    return false;
+  } else {
+    document.getElementById("lastNameErrorMsg").textContent = "";
+    return true;
+  }
+});
+//adresse
+address.addEventListener("input", (e) => {
+  e.preventDefault();
+  if (addressReg.test(address.value) == false || address.value == "") {
+    document.getElementById("addressErrorMsg").textContent =
+      "Merci de saisir votre adresse ex: 10 rue Voltaire";
+    return false;
+  } else {
+    document.getElementById("addressErrorMsg").textContent = "";
+    return true;
+  }
+});
+// ville
+city.addEventListener("input", (e) => {
+  e.preventDefault();
+  if (textReg.test(city.value) == false || city.value == "") {
+    document.getElementById("cityErrorMsg").textContent =
+      "Merci de saisir le nom de votre ville";
+    return false;
+  } else {
+    document.getElementById("cityErrorMsg").textContent = "";
+    return true;
+  }
+});
 
-  // Sélection du formulaire dans le DOM
-  const form = document.querySelector(".cart__order__form");
-
-  // écouter modification  de chaque champ avec attribut "change"
-  form.firstName.addEventListener("change", function () {
-    validFirstName(this);
-  });
-  form.lastName.addEventListener("change", function () {
-    validName(this);
-  });
-  form.address.addEventListener("change", function () {
-    validAddress(this);
-  });
-  form.city.addEventListener("change", function () {
-    validCity(this);
-  });
-  form.email.addEventListener("change", function () {
-    validEmail(this);
-  });
-
-  // Vérification par la regex si le champ est rempli selon les règles, sinon un message d'erreur s'affiche
-  const validFirstName = function (checkfirstName) {
-    let firstNameError = checkfirstName.nextElementSibling;
-    if (firstNameReg.test(checkfirstName.value)) {
-      firstNameError.innerHTML = "";
-    } else {
-      firstNameError.innerHTML =
-        "Merci d'indiquer votre prénom (seules les lettres sont autorisées)";
-    }
-  };
-
-  const validName = function (checkName) {
-    let nameError = checkName.nextElementSibling;
-    if (nameReg.test(checkName.value)) {
-      nameError.innerHTML = "";
-    } else {
-      nameError.innerHTML =
-        "Merci d'indiquer votre nom (seules les lettres sont autorisées)";
-    }
-  };
-
-  const validAddress = function (checkAddress) {
-    let addressError = checkAddress.nextElementSibling;
-    if (addressReg.test(checkAddress.value)) {
-      addressError.innerHTML = "";
-    } else {
-      addressError.innerHTML = "Merci de renseigner votre adresse";
-    }
-  };
-
-  const validCity = function (checkCity) {
-    let cityError = checkCity.nextElementSibling;
-    if (cityReg.test(checkCity.value)) {
-      cityError.innerHTML = "";
-    } else {
-      cityError.innerHTML = "Merci de rentrer le nom de votre ville";
-    }
-  };
-
-  const validEmail = function (checkEmail) {
-    let emailError = checkEmail.nextElementSibling;
-    if (emailReg.test(checkEmail.value)) {
-      emailError.innerHTML = "";
-    } else {
-      emailError.innerHTML = "Merci de renseigner un email valide";
-    }
-  };
-}
-checkForm();
-
-function validateForm() {
-  let inputFirstName = document.getElementById("firstName");
-  let inputName = document.getElementById("lastName");
-  let inputAddress = document.getElementById("address");
-  let inputCity = document.getElementById("city");
-  let inputEmail = document.getElementById("Email");
-
-  document.getElementById("order").addEventListener("click", (e) => {
-    //création d'un tableau
-
-    let orderProduct = [];
-    for (let i in localStorageProduct) {
-      orderProduct.push(localStorageProduct[i].idProduct);
-    }
-    console.log(orderProduct);
-    const order = {
-      contact: {
-        firstName: inputFirstName.value,
-        lastName: inputName.value,
-        address: inputAddress.value,
-        city: inputCity.value,
-        email: inputEmail.value,
-      },
-      products: orderProduct,
-    };
-    // creation de la réquête post: constante avec la méthode post que l'on utilisera dans l'API
-
-    const options = {
-      method: "POST",
-      body: JSON.stringify(order),
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-    };
-    // Appel à l'Api pour la requête Post avec la constante options
-
-    fetch("http://localhost:3000/api/products/order", options)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        localStorage.clear();
-        document.location.href = "confirmation.html?orderId=" + data.orderId;
-      })
-      .catch((error) => {
-        alert("une erreur est seurvenue" + error);
-      });
-  });
-}
-validateForm();
+// adresse mail
+email.addEventListener("input", (e) => {
+  e.preventDefault();
+  if (emailReg.test(email.value) == false || email.value == "") {
+    document.getElementById("emailErrorMsg").textContent =
+      "Merci de saisir une adresse mail valide";
+    return false;
+  } else {
+    document.getElementById("emailErrorMsg").textContent = "";
+    return true;
+  }
+});
