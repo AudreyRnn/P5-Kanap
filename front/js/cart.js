@@ -157,8 +157,7 @@ function getToCart() {
 }
 
 getToCart();
-////////////////////////////////// FORMULAIRE///////////////////////////////////////////////////////////////
-
+//////////////// FORMULAIRE////////////////////
 // Liste des variabls RegEx
 
 //prénom , nom et ville
@@ -240,3 +239,77 @@ email.addEventListener("input", (e) => {
     return true;
   }
 });
+/////// COMMANDE /////
+function sendForm() {
+  const btnOrder = document.getElementById("order");
+
+  // écoute du click: les données du LS sont mises à jour et envoyées à l'API
+
+  btnOrder.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    // varible champs vides
+    const emptyForm =
+      firstName.value === "" ||
+      lastName.value === "" ||
+      address.value === "" ||
+      city.value === "" ||
+      email.value === "";
+
+    // variable champs faux
+
+    const falseReg =
+      textReg.test(firstName.value) == false ||
+      textReg.test(lastName.value) == false ||
+      addressReg.test(address.value) == false ||
+      textReg.test(city.value) == false ||
+      emailReg.test(email.value) == false;
+
+    if (emptyForm || falseReg) {
+      alert(
+        "Tous les champs du formulaire doivent être remplis correctement pour passer commande"
+      );
+      return;
+    } else {
+      //création tableau des infos
+      let productOrder = [];
+      for (let i = 0; i < localStorageProduct.length; i++) {
+        productOrder.push(localStorageProduct[i].idProduct);
+      }
+      console.log(productOrder);
+
+      // récupérer les données des formulaires
+      const order = {
+        contact: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          city: city.value,
+          email: email.value,
+        },
+        products: productOrder,
+      };
+      let options = {
+        method: "POST",
+        body: JSON.stringify(order),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      fetch("http://localhost:3000/api/products/order", options)
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          localStorage.clear();
+          document.location.href = "confirmation.html?orderId=" + data.orderId;
+        })
+        .catch((error) => {
+          console.log("Api Error");
+        });
+    }
+  });
+}
+sendForm();
