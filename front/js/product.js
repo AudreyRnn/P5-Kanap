@@ -101,6 +101,7 @@ Pour consulter votre panier, cliquez sur OK`)
           (obj) =>
             obj.idProduct == product._id && obj.colorProduct == colorChoice
         );
+        
         if (indexKanapExist == -1) {
           localStorageProduct.push(productOptions);
           localStorage.setItem("item", JSON.stringify(localStorageProduct));
@@ -122,6 +123,9 @@ Pour consulter votre panier, cliquez sur OK`)
         console.table(localStorageProduct);
         confirmationPopup();
       }
+    }
+    else {
+      window.alert (" merci d'ajouter des articles pour continuer votre commande ");
     }
   });
 }

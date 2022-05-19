@@ -1,4 +1,4 @@
-// récupération des données depuis Api
+// récupération des données depuis l'Api
 
 fetch("http://localhost:3000/api/products")
   .then((resp) => resp.json())
