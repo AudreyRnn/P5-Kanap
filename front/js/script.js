@@ -4,12 +4,14 @@ fetch("http://localhost:3000/api/products")
   .then((resp) => resp.json())
   .then(function (products) {
     afficheProduct(products);
+  })
+  .catch((error) => {
+    console.log(`message d'erreur ${error}`);
+    alerte("Erreur dans le chargement de la page.");
   });
 
 // création des éléments pour affichage des différents produits
 function afficheProduct(products) {
-  var items = document.getElementById("items");
-
   products.forEach((product) => {
     // element a
     let productLink = document.createElement("a");
