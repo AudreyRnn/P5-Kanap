@@ -1,5 +1,6 @@
 // Récupération du local Storage
 let localStorageProduct = JSON.parse(localStorage.getItem("item"));
+// création de variables
 var totalQuantity = 0;
 var priceTotal = 0;
 
@@ -93,7 +94,7 @@ function getToCart() {
           inputQuantity.setAttribute("max", "100");
           inputQuantity.setAttribute("name", "itemQuantity");
           totalQuantity += item.quantityProduct;
-          quantityChoice = item.quantityProduct;
+          // quantityChoice = item.quantityProduct;
 
           // // insertion de la div delete
 
@@ -131,7 +132,7 @@ function getToCart() {
               cartPrice.innerHTML = priceTotal;
               totalQuantity++;
             }
-            
+
             document.getElementById("totalQuantity").innerHTML = totalQuantity;
 
             localStorageProduct[index].quantityProduct = parseInt(
@@ -139,14 +140,10 @@ function getToCart() {
             );
             localStorage.setItem("item", JSON.stringify(localStorageProduct));
           });
-          console.log("quantityChoice");
-          console.log(quantityChoice);
 
           ////  affichage quantité totale////////
           let itemTotal = document.querySelector("#totalQuantity");
           itemTotal.innerHTML = totalQuantity;
-          console.log("totalQuantity");
-          console.log(totalQuantity);
 
           // affichage  prix total
           let cartPrice = document.querySelector("#totalPrice");
@@ -154,7 +151,8 @@ function getToCart() {
         })
 
         .catch((error) => {
-          console.log(error);
+          console.log(`message d'erreur ${error}`);
+          alerte("Erreur dans le chargement de la page.");
         });
     });
   }
@@ -297,7 +295,7 @@ function sendForm() {
         },
         products: productOrder,
       };
-
+      // mise en place des options de la requête
       let options = {
         method: "POST",
         body: JSON.stringify(order),
@@ -311,12 +309,12 @@ function sendForm() {
           return response.json();
         })
         .then(function (data) {
-          console.log(data);
           localStorage.clear();
           document.location.href = "confirmation.html?orderId=" + data.orderId;
         })
         .catch((error) => {
-          console.log("Api Error");
+          console.log(`message d'erreur ${error}`);
+          alerte("Erreur dans le chargement de la page.");
         });
     }
   });

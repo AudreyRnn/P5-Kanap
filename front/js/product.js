@@ -6,9 +6,7 @@ getProduct();
 // récupération des données de l'api pour le canapé choisi
 function getProduct() {
   fetch("http://localhost:3000/api/products/" + id)
-    .then(function (response) {
-      return response.json();
-    })
+    .then((resp) => resp.json())
 
     .then(function (resultatApi) {
       product = resultatApi;
@@ -18,7 +16,8 @@ function getProduct() {
       }
     })
     .catch((error) => {
-      console.log("Erreur Api");
+      console.log(`message d'erreur ${error}`);
+      alerte("Erreur dans le chargement de la page.");
     });
 }
 
@@ -101,7 +100,7 @@ Pour consulter votre panier, cliquez sur OK`)
           (obj) =>
             obj.idProduct == product._id && obj.colorProduct == colorChoice
         );
-        
+
         if (indexKanapExist == -1) {
           localStorageProduct.push(productOptions);
           localStorage.setItem("item", JSON.stringify(localStorageProduct));
@@ -123,9 +122,10 @@ Pour consulter votre panier, cliquez sur OK`)
         console.table(localStorageProduct);
         confirmationPopup();
       }
-    }
-    else {
-      window.alert (" merci d'ajouter des articles pour continuer votre commande ");
+    } else {
+      window.alert(
+        " merci d'ajouter des articles pour continuer votre commande "
+      );
     }
   });
 }

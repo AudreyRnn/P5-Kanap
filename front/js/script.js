@@ -1,9 +1,9 @@
 // récupération des données depuis l'Api
-
 fetch("http://localhost:3000/api/products")
   .then((resp) => resp.json())
   .then(function (products) {
     afficheProduct(products);
+   // console.table(products); 
   })
   .catch((error) => {
     console.log(`message d'erreur ${error}`);
