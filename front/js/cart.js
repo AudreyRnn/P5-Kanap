@@ -7,6 +7,7 @@ var priceTotal = 0;
 console.table(localStorageProduct);
 const emptyCart = document.querySelector("#cart__items");
 
+// Gérer les produits dans le panier et leur affichage
 function getToCart() {
   // si panier vide afffichage texte
   if (localStorageProduct === null || localStorageProduct === 0) {
@@ -66,7 +67,7 @@ function getToCart() {
           let itemPrice = document.createElement("p");
           itemContentDescription.appendChild(itemPrice);
           itemPrice.innerHTML = product.price + " €";
-          priceTotal += item.quantityProduct * product.price;
+          priceTotal += item.quantityProduct * product.price; //calcul du prix 
 
           // insertion balise div content settings
           let contentSetting = document.createElement("div");
@@ -94,7 +95,6 @@ function getToCart() {
           inputQuantity.setAttribute("max", "100");
           inputQuantity.setAttribute("name", "itemQuantity");
           totalQuantity += item.quantityProduct;
-          // quantityChoice = item.quantityProduct;
 
           // // insertion de la div delete
 
@@ -118,7 +118,7 @@ function getToCart() {
             location.reload();
           });
 
-          //////modification quantité/////////
+          //////modification quantité - prix mis à jour si quantité modifiée/////////
 
           inputQuantity.addEventListener("change", function () {
             if (

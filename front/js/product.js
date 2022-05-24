@@ -84,7 +84,7 @@ function addToCart(product) {
       const confirmationPopup = () => {
         if (
           window.confirm(`Vous avez placé  ${quantityChoice} ${product.name} ${colorChoice} dans votre panier.
-Pour consulter votre panier, cliquez sur OK`)
+          Pour consulter votre panier, cliquez sur OK`)
         ) {
           window.location.href = "cart.html";
         }
@@ -100,12 +100,14 @@ Pour consulter votre panier, cliquez sur OK`)
           (obj) =>
             obj.idProduct == product._id && obj.colorProduct == colorChoice
         );
-
+        // si l'article n'existe pas
         if (indexKanapExist == -1) {
           localStorageProduct.push(productOptions);
           localStorage.setItem("item", JSON.stringify(localStorageProduct));
           confirmationPopup();
-        } else {
+        }
+        // si article identique (id et couleur )
+        else {
           localStorageProduct[indexKanapExist].quantityProduct =
             parseInt(localStorageProduct[indexKanapExist].quantityProduct) +
             parseInt(quantityChoice);
